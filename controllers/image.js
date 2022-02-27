@@ -12,9 +12,11 @@ const createImages = async (file) => {
     return image._id;
 }
 const deleteImage = async (image_id) => {
-    const image = await Images.findOne({_id: image_id});
-    await cloudinary.uploader.destroy(image.cloudinary_id);
-    await image.remove();
+    if (image_id !== 3){
+        const image = await Images.findOne({_id: image_id});
+        await cloudinary.uploader.destroy(image.cloudinary_id);
+        await image.remove();
+    }
 }
 module.exports = {
     createImages,

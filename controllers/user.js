@@ -1,8 +1,8 @@
-const {Users} = require('../models');
+const {Users,Images} = require('../models');
 const {createImages,deleteImage} = require('./image');
 const updateUser = async (req, res) => {
     try {
-        const {full_name, gender, age, email, password} = req.body;
+        const {full_name, gender, age} = req.body;
         const user_id = req.user.id;
         const user = await Users.findOne({_id: user_id});
         let image_id;
@@ -27,6 +27,25 @@ const updateUser = async (req, res) => {
         return res.status(400).json(err);
     }
 }
+const getUser = async (req, res) => {
+    try {
+        const user_id = req.user.id;
+        const user = await Users.findOne({_id: user_id});
+        const image = await Images.findOne({_id: user.avatar_id});
+        const data = {
+            id: user_id,
+            full_name: user.full_name,
+            gender: user.gender,
+            age: user.age,
+            email: user.email,
+            avatar: image.url,
+        }
+        return res.status(200).json(data);
+    }catch (err) {
+        return res.status(400).json(err);
+    }
+}
 module.exports ={
-    updateUser
+    updateUser,
+    getUser
 }
